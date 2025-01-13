@@ -1,30 +1,17 @@
-package com.finalproject.order_service.model;
+package com.finalproject.order_service.dto.response;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cart_item")
-public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_item_id", nullable = false)
+public class CartItemResponseDto {
     private Long cartItemId;
-    @Column(name = "product_id", nullable = false)
     private Long productId;
-    @Column(name = "cart_item_quantity", nullable = false)
     private int cartItemQuantity;
-    @Column(name = "cart_item_price", nullable = false)
-    private double cartItemPrice;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    public double cartItemPrice;
 
     public Long getCartItemId() {
         return cartItemId;
@@ -50,15 +37,7 @@ public class CartItem {
         this.cartItemQuantity = cartItemQuantity;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public double getCartItemPrice(double price) {
+    public double getCartItemPrice() {
         return cartItemPrice;
     }
 
