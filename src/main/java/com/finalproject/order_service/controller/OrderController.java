@@ -1,5 +1,6 @@
 package com.finalproject.order_service.controller;
 
+import com.finalproject.order_service.dto.cartToOrder.CartIdRequestDto;
 import com.finalproject.order_service.dto.request.CartRequestDto;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
 import com.finalproject.order_service.dto.response.OrderResponseDto;
@@ -16,9 +17,9 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/cart")
-    public ResponseEntity<OrderResponseDto> placeOrderFromCart(@RequestBody CartRequestDto cartRequestDto) {
+    public ResponseEntity<OrderResponseDto> placeOrderFromCart(@RequestBody CartIdRequestDto cartIdRequestDto) {
         try {
-            OrderResponseDto orderResponse = orderService.placeOrderFromCart(cartRequestDto);
+            OrderResponseDto orderResponse = orderService.placeOrderFromCart(cartIdRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(orderResponse);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

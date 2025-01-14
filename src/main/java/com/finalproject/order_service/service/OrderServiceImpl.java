@@ -2,6 +2,7 @@ package com.finalproject.order_service.service;
 
 import com.finalproject.order_service.Repo.CartRepository;
 import com.finalproject.order_service.Repo.OrderRepository;
+import com.finalproject.order_service.dto.cartToOrder.CartIdRequestDto;
 import com.finalproject.order_service.dto.request.CartRequestDto;
 import com.finalproject.order_service.dto.request.OrderItemRequestDto;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
@@ -34,18 +35,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto placeOrderFromCart(CartRequestDto cartRequestDto) {
+    public OrderResponseDto placeOrderFromCart(CartIdRequestDto cartIdRequestDto) {
         // Retrieve the cart for the user
-        Cart cart = (Cart) cartRepository.findByUserId(cartRequestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Cart not found for user ID: " + cartRequestDto.getUserId()));
-
+        Long cartId = cartIdRequestDto.getCartId();
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found for cart ID: " + cartId));
         if (cart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Cannot place an order with an empty cart.");
         }
 
         // Create a new order and save it to generate the orderId
         Order order = new Order();
-        order.setUserId(cartRequestDto.getUserId());
+        order.setUserId(cart.getUserId());
         order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.PENDING);
         Order savedOrder = orderRepository.save(order); // Save the order to generate the orderId
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrder(savedOrder); // Set the saved order
             orderItem.setProductId(cartItem.getProductId());
             orderItem.setOrderItemQuantity(cartItem.getCartItemQuantity());
-            orderItem.setOrderItemPrice(fetchProductPrice(cartItem.getProductId())); // Fetch price dynamically
+            orderItem.setOrderItemPrice(cartItem.getCartItemPrice()); // Fetch price dynamically
             return orderItem;
         }).collect(Collectors.toList());
 

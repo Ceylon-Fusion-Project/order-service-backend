@@ -58,7 +58,7 @@ public class CartItem {
         this.cart = cart;
     }
 
-    public double getCartItemPrice(double price) {
+    public double getCartItemPrice() {
         return cartItemPrice;
     }
 

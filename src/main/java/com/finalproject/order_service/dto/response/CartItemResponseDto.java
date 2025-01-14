@@ -11,7 +11,7 @@ public class CartItemResponseDto {
     private Long cartItemId;
     private Long productId;
     private int cartItemQuantity;
-    public double cartItemPrice;
+    private double cartItemPrice;
 
     public Long getCartItemId() {
         return cartItemId;

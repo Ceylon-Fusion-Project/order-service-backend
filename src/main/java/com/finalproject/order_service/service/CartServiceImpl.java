@@ -45,6 +45,9 @@ public class CartServiceImpl implements CartService {
 
         // Return the updated cart mapped to a response DTO
         return modelMapper.map(savedCart, CartResponseDto.class);
+
+
+
     }
 
     private void validateCartRequest(CartRequestDto cartRequestDto) {
@@ -85,8 +88,8 @@ public class CartServiceImpl implements CartService {
             // Create and add a new item to the cart
             CartItem newItem = new CartItem();
             newItem.setProductId(productId);
-            newItem.setCartItemQuantity(quantity);
             newItem.setCartItemPrice(price);
+            newItem.setCartItemQuantity(quantity);
             newItem.setCart(cart);
 
             cart.addCartItem(newItem); // Use the convenience method to maintain bidirectional consistency

@@ -16,10 +16,6 @@ public class CartItemRequestDto {
         return cartItemQuantity;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
     public void setProductId(Long productId) {
         this.productId = productId;
     }
@@ -32,6 +28,11 @@ public class CartItemRequestDto {
     public void setCartItemPrice(double cartItemPrice) {
         this.cartItemPrice = cartItemPrice;
     }
+
+    public Long getProductId() {
+        return productId;
+    }
+
     public double getCartItemPrice() {
         return cartItemPrice;
     }
