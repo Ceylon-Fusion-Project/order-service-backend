@@ -18,9 +18,9 @@ public class OrderItem {
     @Column(name = "product_id")
     private Long productId;
     @Column(name = "order_item_quantity")
-    private int orderItemQuantity;
+    private Integer orderItemQuantity;
     @Column(name = "order_item_price")
-    private double orderItemPrice; // Capture price at order time
+    private Double orderItemPrice; // Capture price at order time
 
     @ManyToOne
     @JoinColumn(name = "order_id",nullable = false)
@@ -42,7 +42,7 @@ public class OrderItem {
         this.productId = productId;
     }
 
-    public int getOrderItemQuantity() {
+    public Integer getOrderItemQuantity() {
         return orderItemQuantity;
     }
 
@@ -50,7 +50,7 @@ public class OrderItem {
         this.orderItemQuantity = orderItemQuantity;
     }
 
-    public double getOrderItemPrice() {
+    public Double getOrderItemPrice() {
         return orderItemPrice;
     }
 
@@ -64,5 +64,13 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void setOrderItemPrice(Double orderItemPrice) {
+        this.orderItemPrice = orderItemPrice;
+    }
+
+    public void setOrderItemQuantity(Integer orderItemQuantity) {
+        this.orderItemQuantity = orderItemQuantity;
     }
 }

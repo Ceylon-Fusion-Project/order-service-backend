@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderItemRequestDto {
     private Long productId;
-    private int orderItemQuantity;
-    private double orderItemPrice;
+    private Integer orderItemQuantity;
+    private Double orderItemPrice;
 
 
     public Long getProductId() {
@@ -21,7 +21,7 @@ public class OrderItemRequestDto {
         this.productId = productId;
     }
 
-    public int getOrderItemQuantity() {
+    public Integer getOrderItemQuantity() {
         return orderItemQuantity;
     }
 
@@ -29,11 +29,19 @@ public class OrderItemRequestDto {
         this.orderItemQuantity = orderItemQuantity;
     }
 
-    public double getOrderItemPrice() {
+    public Double getOrderItemPrice() {
         return orderItemPrice;
     }
 
     public void setOrderItemPrice(double orderItemPrice) {
+        this.orderItemPrice = orderItemPrice;
+    }
+
+    public void setOrderItemQuantity(Integer orderItemQuantity) {
+        this.orderItemQuantity = orderItemQuantity;
+    }
+
+    public void setOrderItemPrice(Double orderItemPrice) {
         this.orderItemPrice = orderItemPrice;
     }
 }

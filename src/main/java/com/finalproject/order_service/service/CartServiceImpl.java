@@ -105,8 +105,8 @@ public class CartServiceImpl implements CartService {
 
     private void processCartItem(Cart cart, CartItemRequestDto cartItemRequestDto) {
         Long productId = cartItemRequestDto.getProductId();
-        int quantity = cartItemRequestDto.getCartItemQuantity();
-        double price = cartItemRequestDto.getCartItemPrice();
+        Integer quantity = cartItemRequestDto.getCartItemQuantity();
+        Double price = cartItemRequestDto.getCartItemPrice();
 
         // Find if the cart already contains the item
         Optional<CartItem> existingItemOptional = cart.getCartItems().stream()
