@@ -4,6 +4,7 @@ import com.finalproject.order_service.Repo.CartItemRepository;
 import com.finalproject.order_service.Repo.CartRepository;
 import com.finalproject.order_service.dto.request.CartItemRequestDto;
 import com.finalproject.order_service.dto.request.CartRequestDto;
+import com.finalproject.order_service.dto.request.RemoveCartItemRequestDto;
 import com.finalproject.order_service.dto.response.CartResponseDto;
 import com.finalproject.order_service.model.Cart;
 import com.finalproject.order_service.model.CartItem;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-
 public class CartServiceImpl implements CartService {
 
     @Autowired
@@ -47,6 +47,39 @@ public class CartServiceImpl implements CartService {
         return modelMapper.map(savedCart, CartResponseDto.class);
 
 
+
+    }
+
+    @Override
+    @Transactional
+    public CartResponseDto removeCartItem(RemoveCartItemRequestDto removeCartItemRequestDto) {
+        Long userId = removeCartItemRequestDto.getUserId();
+        Long productId = removeCartItemRequestDto.getProductId();
+
+        Cart cart = (Cart) cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found for user ID: " + userId));
+
+        Optional<CartItem> itemToRemoveOptional = cart.getCartItems().stream()
+                .filter(item -> item.getProductId().equals(productId))
+                .findFirst();
+
+        if (itemToRemoveOptional.isPresent()) {
+            CartItem itemToRemove = itemToRemoveOptional.get();
+
+            // Remove the item from the cart's list
+            cart.getCartItems().remove(itemToRemove);
+
+            // Delete the item from the database
+            cartItemRepository.delete(itemToRemove);
+
+            // Save the updated cart
+            Cart updatedCart = cartRepository.save(cart);
+
+            // Return the updated cart mapped to a response DTO
+            return modelMapper.map(updatedCart, CartResponseDto.class);
+        } else {
+            throw new IllegalArgumentException("Product ID: " + productId + " not found in the cart.");
+        }
 
     }
 
@@ -95,4 +128,5 @@ public class CartServiceImpl implements CartService {
             cart.addCartItem(newItem); // Use the convenience method to maintain bidirectional consistency
         }
     }
+
 }

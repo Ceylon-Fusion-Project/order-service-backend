@@ -1,4 +1,4 @@
-package com.finalproject.order_service.dto.cartToOrder;
+package com.finalproject.order_service.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

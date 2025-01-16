@@ -1,15 +1,13 @@
 package com.finalproject.order_service.controller;
 
 import com.finalproject.order_service.dto.request.CartRequestDto;
+import com.finalproject.order_service.dto.request.RemoveCartItemRequestDto;
 import com.finalproject.order_service.dto.response.CartResponseDto;
 import com.finalproject.order_service.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -38,5 +36,17 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add item to cart.");
         }
     }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<CartResponseDto> removeCartItem(@RequestBody RemoveCartItemRequestDto removeCartItemRequestDto) {
+
+            // Call the service method to remove the cart item
+            CartResponseDto updatedCart = cartService.removeCartItem(removeCartItemRequestDto);
+
+            // Return the updated cart along with a success status
+            return ResponseEntity.ok(updatedCart);
+
+    }
+
 }
 

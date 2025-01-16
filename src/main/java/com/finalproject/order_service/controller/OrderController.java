@@ -1,7 +1,6 @@
 package com.finalproject.order_service.controller;
 
-import com.finalproject.order_service.dto.cartToOrder.CartIdRequestDto;
-import com.finalproject.order_service.dto.request.CartRequestDto;
+import com.finalproject.order_service.dto.request.CartIdRequestDto;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
 import com.finalproject.order_service.dto.response.OrderResponseDto;
 import com.finalproject.order_service.service.OrderService;
@@ -11,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
