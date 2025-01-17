@@ -19,12 +19,12 @@ public class WishlistServiceImpl implements WishlistService {
     @Autowired
     private  WishlistRepository wishlistRepository;
     @Autowired
-    private ProductClient productFeignClient;
+    private ProductClient productClient;
 
     @Autowired
     public WishlistServiceImpl(WishlistRepository wishlistRepository, ProductClient productClient) {
         this.wishlistRepository = wishlistRepository;
-        this.productFeignClient = productFeignClient;
+        this.productClient = productClient;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class WishlistServiceImpl implements WishlistService {
         Long productId = wishlistRequestDto.getProductId();
 
         // Fetch product details from Product Microservice
-        ProductResponseDto product = productFeignClient.getProductById(productId);
+        ProductResponseDto product = productClient.getProductById(productId);
 
         if (product == null) {
             throw new RuntimeException("Product not found!");
@@ -55,7 +55,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         return wishlistItems.stream()
                 .map(item -> {
-                    ProductResponseDto product = productFeignClient.getProductById(item.getProductId());
+                    ProductResponseDto product = productClient.getProductById(item.getProductId());
                     return new WishlistResponseDto(item.getProductId(), product.getProductName(), product.getProductPrice(), item.getCreatedAt());
                 })
                 .collect(Collectors.toList());

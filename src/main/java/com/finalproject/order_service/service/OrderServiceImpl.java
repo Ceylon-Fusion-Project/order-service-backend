@@ -5,9 +5,7 @@ import com.finalproject.order_service.Repo.OrderRepository;
 import com.finalproject.order_service.dto.request.CartIdRequestDto;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
 import com.finalproject.order_service.dto.response.OrderResponseDto;
-import com.finalproject.order_service.dto.response.ProductResponseDto;
 import com.finalproject.order_service.enums.OrderStatus;
-import com.finalproject.order_service.feingClient.ProductClient;
 import com.finalproject.order_service.model.Cart;
 import com.finalproject.order_service.model.Order;
 import com.finalproject.order_service.model.OrderItem;
@@ -32,9 +30,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private ProductClient productClient;
-
     @Override
     @Transactional
     public OrderResponseDto placeOrderFromCart(CartIdRequestDto cartIdRequestDto) {
@@ -42,20 +37,10 @@ public class OrderServiceImpl implements OrderService {
         Long cartId = cartIdRequestDto.getCartId();
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found for cart ID: " + cartId));
+
         if (cart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Cannot place an order with an empty cart.");
         }
-
-        cart.getCartItems().forEach(cartItem -> {
-            ProductResponseDto product = productClient.getProductById(cartItem.getProductId());
-            if (product.getAvailableQuantity() < cartItem.getCartItemQuantity()) {
-                throw new IllegalArgumentException(
-                        "Insufficient stock for product ID: " + cartItem.getProductId() +
-                                ". Available: " + product.getAvailableQuantity() +
-                                ", Requested: " + cartItem.getCartItemQuantity()
-                );
-            }
-        });
 
         // Create a new order and save it to generate the orderId
         Order order = new Order();
@@ -70,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrder(savedOrder); // Set the saved order
             orderItem.setProductId(cartItem.getProductId());
             orderItem.setOrderItemQuantity(cartItem.getCartItemQuantity());
-            orderItem.setOrderItemPrice(cartItem.getCartItemPrice()); // Fetch price dynamically
+            orderItem.setOrderItemPrice(cartItem.getCartItemPrice());
             return orderItem;
         }).collect(Collectors.toList());
 
@@ -78,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
         savedOrder.setOrderItems(orderItems);
         Order finalSavedOrder = orderRepository.save(savedOrder);
 
+        // Delete the cart after the order is placed
         cartRepository.delete(cart);
 
         // Map the saved order to response DTO using ModelMapper
@@ -92,25 +78,6 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Order must contain at least one item.");
         }
 
-        orderRequestDto.getOrderItems().forEach(itemDto -> {
-            // Fetch product details from the Product Microservice using FeignClient
-            ProductResponseDto product = productClient.getProductById(itemDto.getProductId());
-
-            if (product == null) {
-                throw new IllegalArgumentException("Product not found for ID: " + itemDto.getProductId());
-            }
-
-            if (product.getAvailableQuantity() < itemDto.getOrderItemQuantity()) {
-                throw new IllegalArgumentException(
-                        "Insufficient stock for product ID: " + itemDto.getProductId() +
-                                ". Available: " + product.getAvailableQuantity() +
-                                ", Requested: " + itemDto.getOrderItemQuantity()
-                );
-            }
-
-            // Optionally, update item price with the product's price from the Product Microservice
-            itemDto.setOrderItemPrice(product.getProductPrice());
-        });
         // Create a new order and save it to generate the orderId
         Order order = new Order();
         order.setUserId(orderRequestDto.getUserId());
@@ -135,6 +102,4 @@ public class OrderServiceImpl implements OrderService {
         // Map the saved order to response DTO using ModelMapper
         return modelMapper.map(finalSavedOrder, OrderResponseDto.class);
     }
-
 }
-
