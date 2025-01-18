@@ -30,7 +30,7 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public String addToWishlist(WishlistRequestDto wishlistRequestDto) {
         Long userId = wishlistRequestDto.getUserId();
-        Long productId = wishlistRequestDto.getProductId();
+        Integer productId = wishlistRequestDto.getProductId();
 
         // Fetch product details from Product Microservice
         ProductResponseDto product = productClient.getProductById(productId);
@@ -64,7 +64,7 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public String removeFromWishlist(WishlistRequestDto wishlistRequestDto) {
         Long userId = wishlistRequestDto.getUserId();
-        Long productId = wishlistRequestDto.getProductId();
+        Integer productId = wishlistRequestDto.getProductId();
 
         // Find the wishlist item by userId and productId
         Wishlist wishlistItem = wishlistRepository.findByUserIdAndProductId(userId, productId);
