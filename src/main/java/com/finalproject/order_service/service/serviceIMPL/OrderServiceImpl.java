@@ -2,7 +2,6 @@ package com.finalproject.order_service.service.serviceIMPL;
 
 import com.finalproject.order_service.Repo.CartRepository;
 import com.finalproject.order_service.Repo.OrderRepository;
-import com.finalproject.order_service.dto.request.CartIdRequestDto;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
 import com.finalproject.order_service.dto.response.OrderResponseDto;
 import com.finalproject.order_service.enums.OrderStatus;
@@ -33,11 +32,10 @@ public class   OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto placeOrderFromCart(CartIdRequestDto cartIdRequestDto) {
+    public OrderResponseDto placeOrderFromCart(Long userId) {
         // Retrieve the cart for the user
-        Long cartId = cartIdRequestDto.getCartId();
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Cart not found for cart ID: " + cartId));
+        Cart cart = (Cart) cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found for user ID: " + userId));
 
         if (cart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Cannot place an order with an empty cart.");
@@ -71,6 +69,7 @@ public class   OrderServiceImpl implements OrderService {
         return modelMapper.map(finalSavedOrder, OrderResponseDto.class);
     }
 
+
     @Override
     @Transactional
     public OrderResponseDto placeDirectOrder(OrderRequestDto orderRequestDto) {
@@ -103,4 +102,23 @@ public class   OrderServiceImpl implements OrderService {
         // Map the saved order to response DTO using ModelMapper
         return modelMapper.map(finalSavedOrder, OrderResponseDto.class);
     }
+
+    @Override
+    @Transactional
+    public List<OrderResponseDto> getOrdersByUserId(Long userId) {
+        // Retrieve all orders for the given user ID
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        if (orders.isEmpty()) {
+            throw new IllegalArgumentException("No orders found for user ID: " + userId);
+        }
+
+        // Map the orders to response DTOs
+        List<OrderResponseDto> orderResponseDtos = orders.stream()
+                .map(order -> modelMapper.map(order, OrderResponseDto.class))
+                .collect(Collectors.toList());
+
+        return orderResponseDtos;
+    }
+
 }
