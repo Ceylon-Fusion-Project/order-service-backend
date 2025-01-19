@@ -1,4 +1,4 @@
-package com.finalproject.order_service.service;
+package com.finalproject.order_service.service.serviceIMPL;
 
 import com.finalproject.order_service.Repo.CartRepository;
 import com.finalproject.order_service.Repo.OrderRepository;
@@ -9,6 +9,7 @@ import com.finalproject.order_service.enums.OrderStatus;
 import com.finalproject.order_service.model.Cart;
 import com.finalproject.order_service.model.Order;
 import com.finalproject.order_service.model.OrderItem;
+import com.finalproject.order_service.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class   OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;

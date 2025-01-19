@@ -15,7 +15,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/cart")
+    @PostMapping("/cart-order")
     public ResponseEntity<OrderResponseDto> placeOrderFromCart(@RequestBody CartIdRequestDto cartIdRequestDto) {
         try {
             OrderResponseDto orderResponse = orderService.placeOrderFromCart(cartIdRequestDto);
@@ -25,7 +25,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/direct")
+    @PostMapping("/direct-order")
     public ResponseEntity<OrderResponseDto> placeDirectOrder(@RequestBody OrderRequestDto orderRequestDto) {
         try {
             OrderResponseDto orderResponse = orderService.placeDirectOrder(orderRequestDto);

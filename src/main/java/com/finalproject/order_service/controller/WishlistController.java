@@ -16,7 +16,7 @@ public class WishlistController {
     @Autowired
     private WishlistService wishlistService;
 
-    @PostMapping("/add")
+    @PostMapping("/add-item-to-wishlist")
     public ResponseEntity<String> addToWishlist(@RequestBody WishlistRequestDto wishlistRequestDto) {
         try {
             String response = wishlistService.addToWishlist(wishlistRequestDto);
@@ -27,7 +27,7 @@ public class WishlistController {
         }
     }
 
-    @PostMapping("/remove")
+    @PostMapping("/remove-item-from-wishlist")
     public ResponseEntity<String> removeFromWishlist(@RequestBody WishlistRequestDto wishlistRequestDto) {
         try {
             String response = wishlistService.removeFromWishlist(wishlistRequestDto);
@@ -38,7 +38,7 @@ public class WishlistController {
         }
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("get-wishlist/{userId}")
     public ResponseEntity<List<WishlistResponseDto>> getWishlist(@PathVariable Long userId) {
         try {
             List<WishlistResponseDto> wishlist = wishlistService.getWishlist(userId);

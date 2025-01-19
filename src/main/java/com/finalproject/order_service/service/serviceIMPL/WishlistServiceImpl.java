@@ -1,4 +1,4 @@
-package com.finalproject.order_service.service;
+package com.finalproject.order_service.service.serviceIMPL;
 
 import com.finalproject.order_service.Repo.WishlistRepository;
 import com.finalproject.order_service.dto.request.WishlistRequestDto;
@@ -6,6 +6,7 @@ import com.finalproject.order_service.dto.response.ProductResponseDto;
 import com.finalproject.order_service.dto.response.WishlistResponseDto;
 import com.finalproject.order_service.feingClient.ProductClient;
 import com.finalproject.order_service.model.Wishlist;
+import com.finalproject.order_service.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

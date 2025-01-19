@@ -12,16 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 public class CartRequestDto {
     private Long userId;
-    private List<CartItemRequestDto> cartItems;
-
-
-
+    private CartItemRequestDto cartItem;
 
     public Long getUserId() {
         return userId;
     }
 
-    public List<CartItemRequestDto> getCartItems() {
-        return cartItems;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public CartItemRequestDto getCartItem() {
+        return cartItem;
+    }
+
+    public void setCartItem(CartItemRequestDto cartItem) {
+        this.cartItem = cartItem;
     }
 }
