@@ -7,6 +7,8 @@ import com.finalproject.order_service.dto.response.WishlistResponseDto;
 import com.finalproject.order_service.feingClient.ProductClient;
 import com.finalproject.order_service.model.Wishlist;
 import com.finalproject.order_service.service.WishlistService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class WishlistServiceImpl implements WishlistService {
 
+    private static final Logger log = LoggerFactory.getLogger(WishlistServiceImpl.class);
     @Autowired
     private  WishlistRepository wishlistRepository;
     @Autowired
@@ -32,7 +35,7 @@ public class WishlistServiceImpl implements WishlistService {
     public String addToWishlist(WishlistRequestDto wishlistRequestDto) {
         Long userId = wishlistRequestDto.getUserId();
         Integer productId = wishlistRequestDto.getProductId();
-
+        log.info(productId.toString());
         // Fetch product details from Product Microservice
         ProductResponseDto product = productClient.getProductById(productId);
 

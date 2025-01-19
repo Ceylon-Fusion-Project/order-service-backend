@@ -23,7 +23,7 @@ public class WishlistController {
             return ResponseEntity.ok(response);
         }
         catch (Exception ex) {
-            throw new RuntimeException("An unexpected error occurred while adding to wishlist.");
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
