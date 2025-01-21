@@ -50,7 +50,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/direct-order/user")
+    @PatchMapping("/direct-order/user")
     public ResponseEntity<StandardResponse> placeDirectOrder(@RequestBody OrderRequestDto orderRequestDto) {
         try {
             OrderResponseDto orderResponse = orderService.placeDirectOrder(orderRequestDto);
@@ -62,7 +62,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping(
+    @PatchMapping(
             path = "/cancel-order/user",
             params = "orderId"
     )
