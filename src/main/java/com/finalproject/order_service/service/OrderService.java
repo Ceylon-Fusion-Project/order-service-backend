@@ -9,4 +9,5 @@ public interface OrderService {
     OrderResponseDto placeOrderFromCart(Long userId);
     OrderResponseDto placeDirectOrder(OrderRequestDto orderRequestDto);
     List<OrderResponseDto> getOrdersByUserId(Long userId);
+    OrderResponseDto cancelOrderByUserId(Long userId);
 }

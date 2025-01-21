@@ -114,11 +114,36 @@ public class   OrderServiceImpl implements OrderService {
         }
 
         // Map the orders to response DTOs
-        List<OrderResponseDto> orderResponseDtos = orders.stream()
+        List<OrderResponseDto> orderResponseDto = orders.stream()
                 .map(order -> modelMapper.map(order, OrderResponseDto.class))
                 .collect(Collectors.toList());
 
-        return orderResponseDtos;
+        return orderResponseDto;
     }
 
+    @Override
+    @Transactional
+    public OrderResponseDto cancelOrderByUserId(Long userId) {
+        // Fetch the order for the given user ID
+        Order order = (Order) orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
+                .orElseThrow(() -> new IllegalArgumentException("No pending order found for user ID: " + userId));
+
+        Long orderId = order.getOrderId();
+
+        // Update the order status to canceled
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        order.setOrderDate(LocalDateTime.now()); // Update order date to the cancellation time
+
+        // Remove canceled items from the order's items
+        List<OrderItem> orderItems = order.getOrderItems();
+        orderItems.removeIf(item -> item.getOrder().getOrderId().equals(orderId));
+
+        order.setOrderItems(orderItems);
+
+        orderRepository.save(order);
+
+        // Map the order to the response DTO
+        return modelMapper.map(order, OrderResponseDto.class);
+    // Retrieve the order for the given user ID
+    }
 }

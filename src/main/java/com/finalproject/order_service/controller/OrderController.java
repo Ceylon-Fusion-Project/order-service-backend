@@ -56,6 +56,18 @@ public class OrderController {
         }
     }
 
+    @PostMapping("/cancel-order/{userId}")
+    public ResponseEntity<StandardResponse> cancelOrderByUserId(@PathVariable Long userId) {
+        try {
+            OrderResponseDto orderResponse = orderService.cancelOrderByUserId(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new StandardResponse(HttpStatus.OK.value(), "Order canceled successfully.", orderResponse));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new StandardResponse(HttpStatus.BAD_REQUEST.value(), "Failed to cancel order.", null));
+        }
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardResponse> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
