@@ -38,8 +38,11 @@ public class WishlistController {
         }
     }
 
-    @GetMapping("get-wishlist/{userId}")
-    public ResponseEntity<List<WishlistResponseDto>> getWishlist(@PathVariable Long userId) {
+    @GetMapping(
+            path = "get-wishlist/user",
+            params = "userId"
+    )
+    public ResponseEntity<List<WishlistResponseDto>> getWishlist(@RequestParam(value = "userId" ) Long userId) {
         try {
             List<WishlistResponseDto> wishlist = wishlistService.getWishlist(userId);
             return ResponseEntity.ok(wishlist);

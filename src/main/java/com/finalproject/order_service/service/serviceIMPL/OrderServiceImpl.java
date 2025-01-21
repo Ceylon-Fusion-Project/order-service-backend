@@ -123,12 +123,10 @@ public class   OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto cancelOrderByUserId(Long userId) {
-        // Fetch the order for the given user ID
-        Order order = (Order) orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
-                .orElseThrow(() -> new IllegalArgumentException("No pending order found for user ID: " + userId));
-
-        Long orderId = order.getOrderId();
+    public OrderResponseDto cancelOrderByUserId(Long orderId) {
+        // Fetch the order for the given order ID
+        Order order = (Order) orderRepository.findByOrderIdAndOrderStatus(orderId, OrderStatus.PENDING)
+                .orElseThrow(() -> new IllegalArgumentException("No pending order found for order ID: " + orderId));
 
         // Update the order status to canceled
         order.setOrderStatus(OrderStatus.CANCELLED);
@@ -140,10 +138,28 @@ public class   OrderServiceImpl implements OrderService {
 
         order.setOrderItems(orderItems);
 
+        // Save the updated order
         orderRepository.save(order);
 
         // Map the order to the response DTO
         return modelMapper.map(order, OrderResponseDto.class);
-    // Retrieve the order for the given user ID
+    }
+    @Transactional
+    @Override
+    public OrderResponseDto confirmOrderByUserId(Long orderId) {
+
+            // Fetch the order for the given order ID
+            Order order = (Order) orderRepository.findByOrderIdAndOrderStatus(orderId, OrderStatus.PENDING)
+                    .orElseThrow(() -> new IllegalArgumentException("No pending order found for order ID: " + orderId));
+
+            // Update the order status to confirmed
+            order.setOrderStatus(OrderStatus. CONFIRMED);
+            order.setOrderDate(LocalDateTime.now()); // Update order date to the confirmation time
+
+            // Save the updated order
+            orderRepository.save(order);
+
+            // Map the order to the response DTO
+            return modelMapper.map(order, OrderResponseDto.class);
     }
 }

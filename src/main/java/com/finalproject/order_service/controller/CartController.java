@@ -76,8 +76,11 @@ public class CartController {
         }
     }
 
-    @GetMapping("/get-cart-items/{userId}")
-    public ResponseEntity<StandardResponse> getCartItemsByUserId(@PathVariable Long userId) {
+    @GetMapping(
+            path = "/get-cart-items/user",
+            params = "userId"
+    )
+    public ResponseEntity<StandardResponse> getCartItemsByUserId(@RequestParam(value = "userId") Long userId) {
         // Validate the input
         if (userId == null) {
             return ResponseEntity.badRequest().body(
