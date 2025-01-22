@@ -3,6 +3,7 @@ package com.finalproject.order_service.service.serviceIMPL;
 import com.finalproject.order_service.Repo.CartRepository;
 import com.finalproject.order_service.Repo.OrderRepository;
 import com.finalproject.order_service.dto.request.OrderRequestDto;
+import com.finalproject.order_service.dto.response.OrderItemResponseDto;
 import com.finalproject.order_service.dto.response.OrderResponseDto;
 import com.finalproject.order_service.enums.OrderStatus;
 import com.finalproject.order_service.model.Cart;
@@ -12,10 +13,14 @@ import com.finalproject.order_service.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -161,5 +166,36 @@ public class   OrderServiceImpl implements OrderService {
 
             // Map the order to the response DTO
             return modelMapper.map(order, OrderResponseDto.class);
+    }
+
+    @Override
+    @Transactional
+    public Page<OrderResponseDto> getAllOrders(Optional<OrderStatus> orderStatus, Pageable pageable) {
+        Page<Order> orders;
+
+        // Fetch orders based on orderStatus or all orders
+        if (orderStatus.isPresent()) {
+            orders = orderRepository.findByOrderStatus(orderStatus.get(), pageable);
+        } else {
+            orders = orderRepository.findAll(pageable);
+        }
+
+        // Map each Order entity to OrderResponseDto using ModelMapper
+        List<OrderResponseDto> orderDtos = orders.getContent().stream()
+                .map(order -> {
+                    OrderResponseDto orderDto = modelMapper.map(order, OrderResponseDto.class);
+
+                    // Map the OrderItems collection to OrderItemResponseDto using ModelMapper
+                    List<OrderItemResponseDto> orderItemDtos = order.getOrderItems().stream()
+                            .map(orderItem -> modelMapper.map(orderItem, OrderItemResponseDto.class))
+                            .collect(Collectors.toList());
+
+                    orderDto.setOrderItems(orderItemDtos);
+                    return orderDto;
+                })
+                .collect(Collectors.toList());
+
+        // Return the page of OrderResponseDto
+        return new PageImpl<>(orderDtos);
     }
 }
