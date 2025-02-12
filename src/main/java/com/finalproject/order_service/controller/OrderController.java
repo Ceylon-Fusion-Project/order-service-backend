@@ -41,7 +41,10 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/get-all-orders/admin")
+    @GetMapping(
+            path = "/get-all-orders/admin",
+            params = {"orderStatus", "page", "size"}
+    )
     public ResponseEntity<StandardResponse> getAllOrders(
             @RequestParam Optional<OrderStatus> orderStatus,
             @RequestParam(defaultValue = "0") int page,
@@ -82,7 +85,7 @@ public class OrderController {
         }
     }
 
-    @PatchMapping("/direct-order/user")
+    @PostMapping("/direct-order/user")
     public ResponseEntity<StandardResponse> placeDirectOrder(@RequestBody OrderRequestDto orderRequestDto) {
         try {
             OrderResponseDto orderResponse = orderService.placeDirectOrder(orderRequestDto);
@@ -109,7 +112,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping(
+    @PatchMapping(
             path = "/confirm-order/user",
             params = "orderId"
     )

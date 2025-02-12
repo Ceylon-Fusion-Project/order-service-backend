@@ -74,7 +74,6 @@ public class   OrderServiceImpl implements OrderService {
         return modelMapper.map(finalSavedOrder, OrderResponseDto.class);
     }
 
-
     @Override
     @Transactional
     public OrderResponseDto placeDirectOrder(OrderRequestDto orderRequestDto) {
@@ -158,7 +157,7 @@ public class   OrderServiceImpl implements OrderService {
                     .orElseThrow(() -> new IllegalArgumentException("No pending order found for order ID: " + orderId));
 
             // Update the order status to confirmed
-            order.setOrderStatus(OrderStatus. CONFIRMED);
+            order.setOrderStatus(OrderStatus.CONFIRMED);
             order.setOrderDate(LocalDateTime.now()); // Update order date to the confirmation time
 
             // Save the updated order
