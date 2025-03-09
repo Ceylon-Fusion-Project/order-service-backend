@@ -11,7 +11,4 @@ import java.time.LocalDateTime;
 @Data
 public class WishlistResponseDto {
     private Integer productId;
-    private String productName;
-    private Double productPrice;
-    private LocalDateTime createdAt;
 }

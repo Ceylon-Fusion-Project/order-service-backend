@@ -80,17 +80,17 @@
 		</dependency>
 
 		<!-- OpenFeign -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>4.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.cloudbees.sdk</groupId>
-			<artifactId>fallback-assembly</artifactId>
-			<version>1.5.2</version>
-		</dependency>
-		<!-- Eureka Client -->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-starter-openfeign</artifactId>-->
+<!--			<version>4.0.3</version>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>com.cloudbees.sdk</groupId>-->
+<!--			<artifactId>fallback-assembly</artifactId>-->
+<!--			<version>1.5.2</version>-->
+<!--		</dependency>-->
+<!--		 Eureka Client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>

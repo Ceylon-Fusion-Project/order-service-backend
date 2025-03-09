@@ -2,9 +2,7 @@ package com.finalproject.order_service.service.serviceIMPL;
 
 import com.finalproject.order_service.Repo.WishlistRepository;
 import com.finalproject.order_service.dto.request.WishlistRequestDto;
-import com.finalproject.order_service.dto.response.ProductResponseDto;
 import com.finalproject.order_service.dto.response.WishlistResponseDto;
-import com.finalproject.order_service.feingClient.ProductClient;
 import com.finalproject.order_service.model.Wishlist;
 import com.finalproject.order_service.service.WishlistService;
 import org.slf4j.Logger;
@@ -20,28 +18,20 @@ import java.util.stream.Collectors;
 public class WishlistServiceImpl implements WishlistService {
 
     private static final Logger log = LoggerFactory.getLogger(WishlistServiceImpl.class);
-    @Autowired
-    private  WishlistRepository wishlistRepository;
-    @Autowired
-    private ProductClient productClient;
 
     @Autowired
-    public WishlistServiceImpl(WishlistRepository wishlistRepository, ProductClient productClient) {
+    private WishlistRepository wishlistRepository;
+
+    @Autowired
+    public WishlistServiceImpl(WishlistRepository wishlistRepository) {
         this.wishlistRepository = wishlistRepository;
-        this.productClient = productClient;
     }
 
     @Override
     public String addToWishlist(WishlistRequestDto wishlistRequestDto) {
         Long userId = wishlistRequestDto.getUserId();
         Integer productId = wishlistRequestDto.getProductId();
-        log.info(productId.toString());
-        // Fetch product details from Product Microservice
-        ProductResponseDto product = productClient.getProductById(productId);
-
-        if (product == null) {
-            throw new RuntimeException("Product not found!");
-        }
+        log.info("Adding product to wishlist: " + productId);
 
         // Save product to the wishlist
         Wishlist wishlist = new Wishlist();
@@ -58,10 +48,7 @@ public class WishlistServiceImpl implements WishlistService {
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(userId);
 
         return wishlistItems.stream()
-                .map(item -> {
-                    ProductResponseDto product = productClient.getProductById(item.getProductId());
-                    return new WishlistResponseDto(item.getProductId(), product.getProductName(), product.getProductPrice(), item.getCreatedAt());
-                })
+                .map(item -> new WishlistResponseDto(item.getProductId()))
                 .collect(Collectors.toList());
     }
 
