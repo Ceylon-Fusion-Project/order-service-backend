@@ -105,6 +105,46 @@ public class CartServiceImpl implements CartService {
         return modelMapper.map(cart, CartResponseDto.class);
     }
 
+    /// //////////////////////////////////////////////////////////////////
+    @Transactional
+    @Override
+    public CartResponseDto incrementCartItemQuantity(RemoveCartItemRequestDto requestDto) {
+        return changeQuantityByStep(requestDto, 1);
+    }
+
+    @Transactional
+    @Override
+    public CartResponseDto decrementCartItemQuantity(RemoveCartItemRequestDto requestDto) {
+        return changeQuantityByStep(requestDto, -1);
+    }
+
+    private CartResponseDto changeQuantityByStep(RemoveCartItemRequestDto requestDto, int step) {
+        Cart cart = (Cart) cartRepository.findByUserId(requestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found for user ID: " + requestDto.getUserId()));
+
+        Optional<CartItem> itemOptional = cart.getCartItems().stream()
+                .filter(item -> item.getProductId().equals(requestDto.getProductId()))
+                .findFirst();
+
+        if (itemOptional.isEmpty()) {
+            throw new IllegalArgumentException("Product not found in cart.");
+        }
+
+        CartItem item = itemOptional.get();
+        int newQuantity = item.getCartItemQuantity() + step;
+
+        if (newQuantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be at least 1. To remove, use the remove API.");
+        }
+
+        item.setCartItemQuantity(newQuantity);
+        cartItemRepository.save(item);
+
+        return modelMapper.map(cart, CartResponseDto.class);
+    }
+
+    /// ///////////////////////////////////////////////////////////
+
     private void validateCartRequest(CartRequestDto cartRequestDto) {
         if (cartRequestDto.getUserId() == null || cartRequestDto.getCartItem() == null) {
             throw new IllegalArgumentException("User ID and cart item must not be null.");

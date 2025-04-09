@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@CrossOrigin
 public class CartController {
 
     @Autowired
@@ -46,7 +47,7 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("/remove-item-from-cart")
+    @PostMapping("/remove-item-from-cart")
     public ResponseEntity<StandardResponse> removeCartItem(@RequestBody RemoveCartItemRequestDto removeCartItemRequestDto) {
         // Validate input
         if (removeCartItemRequestDto == null || removeCartItemRequestDto.getUserId() == null || removeCartItemRequestDto.getProductId() == null) {
@@ -106,5 +107,44 @@ public class CartController {
             );
         }
     }
+
+    /// //////////////////////////////////////////////////////////////////
+    @PostMapping("/increment-item")
+    public ResponseEntity<StandardResponse> incrementCartItem(@RequestBody RemoveCartItemRequestDto requestDto) {
+        return handleQuantityChange(requestDto, true);
+    }
+
+    @PostMapping("/decrement-item")
+    public ResponseEntity<StandardResponse> decrementCartItem(@RequestBody RemoveCartItemRequestDto requestDto) {
+        return handleQuantityChange(requestDto, false);
+    }
+
+    private ResponseEntity<StandardResponse> handleQuantityChange(RemoveCartItemRequestDto requestDto, boolean isIncrement) {
+        if (requestDto.getUserId() == null || requestDto.getProductId() == null) {
+            return ResponseEntity.badRequest().body(
+                    new StandardResponse(HttpStatus.BAD_REQUEST.value(), "User ID and Product ID must be provided.", null)
+            );
+        }
+
+        try {
+            CartResponseDto updatedCart = isIncrement
+                    ? cartService.incrementCartItemQuantity(requestDto)
+                    : cartService.decrementCartItemQuantity(requestDto);
+
+            return ResponseEntity.ok(
+                    new StandardResponse(HttpStatus.OK.value(), "Cart item quantity updated successfully.", updatedCart)
+            );
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    new StandardResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null)
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new StandardResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to update cart item quantity.", null)
+            );
+        }
+    }
+
 
 }

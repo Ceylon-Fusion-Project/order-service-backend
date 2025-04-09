@@ -8,4 +8,8 @@ public interface CartService {
     CartResponseDto addToCart(CartRequestDto cartRequestDto);
     CartResponseDto removeCartItem(RemoveCartItemRequestDto removeCartItemRequestDto);
     CartResponseDto getCartItemsByUserId(Long userId);
+
+    CartResponseDto incrementCartItemQuantity(RemoveCartItemRequestDto requestDto);
+
+    CartResponseDto decrementCartItemQuantity(RemoveCartItemRequestDto requestDto);
 }
