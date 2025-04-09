@@ -5,12 +5,11 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class CartItemRequestDto {
 
     private Long productId;
-    private int cartItemQuantity;
-    private double cartItemPrice;
+    private Integer cartItemQuantity;
+    private Double cartItemPrice;
 
     public Integer getCartItemQuantity() {
         return cartItemQuantity;
@@ -33,7 +32,15 @@ public class CartItemRequestDto {
         return productId;
     }
 
-    public double getCartItemPrice() {
+    public Double getCartItemPrice() {
         return cartItemPrice;
+    }
+
+    public void setCartItemQuantity(Integer cartItemQuantity) {
+        this.cartItemQuantity = cartItemQuantity;
+    }
+
+    public void setCartItemPrice(Double cartItemPrice) {
+        this.cartItemPrice = cartItemPrice;
     }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,7 +23,7 @@ public class Cart {
     private Long userId;
 
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems = new ArrayList<>();
+    private List<CartItem> cartItems;
 
     public Long getCartId() {
         return cartId;
@@ -47,6 +48,7 @@ public class Cart {
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
+
     // Convenience methods for managing bi-directional relationships
     public void addCartItem(CartItem cartItem) {
         cartItems.add(cartItem);
@@ -57,4 +59,5 @@ public class Cart {
         cartItems.remove(cartItem);
         cartItem.setCart(null);
     }
+
 }

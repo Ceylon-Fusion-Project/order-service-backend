@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class CartItemResponseDto {
     private Long cartItemId;
     private Long productId;
-    private int cartItemQuantity;
-    private double cartItemPrice;
+    private Integer cartItemQuantity;
+    private Double cartItemPrice;
 
     public Long getCartItemId() {
         return cartItemId;
@@ -29,7 +29,7 @@ public class CartItemResponseDto {
         this.productId = productId;
     }
 
-    public int getCartItemQuantity() {
+    public Integer getCartItemQuantity() {
         return cartItemQuantity;
     }
 
@@ -37,11 +37,19 @@ public class CartItemResponseDto {
         this.cartItemQuantity = cartItemQuantity;
     }
 
-    public double getCartItemPrice() {
+    public Double getCartItemPrice() {
         return cartItemPrice;
     }
 
     public void setCartItemPrice(double cartItemPrice) {
+        this.cartItemPrice = cartItemPrice;
+    }
+
+    public void setCartItemQuantity(Integer cartItemQuantity) {
+        this.cartItemQuantity = cartItemQuantity;
+    }
+
+    public void setCartItemPrice(Double cartItemPrice) {
         this.cartItemPrice = cartItemPrice;
     }
 }

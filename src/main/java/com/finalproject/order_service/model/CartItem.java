@@ -18,9 +18,9 @@ public class CartItem {
     @Column(name = "product_id", nullable = false)
     private Long productId;
     @Column(name = "cart_item_quantity", nullable = false)
-    private int cartItemQuantity;
+    private Integer cartItemQuantity;
     @Column(name = "cart_item_price", nullable = false)
-    private double cartItemPrice;
+    private Double cartItemPrice;
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
@@ -42,12 +42,20 @@ public class CartItem {
         this.productId = productId;
     }
 
-    public int getCartItemQuantity() {
+    public Integer getCartItemQuantity() {
         return cartItemQuantity;
     }
 
-    public void setCartItemQuantity(int cartItemQuantity) {
+    public void setCartItemQuantity(Integer cartItemQuantity) {
         this.cartItemQuantity = cartItemQuantity;
+    }
+
+    public Double getCartItemPrice() {
+        return cartItemPrice;
+    }
+
+    public void setCartItemPrice(Double cartItemPrice) {
+        this.cartItemPrice = cartItemPrice;
     }
 
     public Cart getCart() {
@@ -56,13 +64,5 @@ public class CartItem {
 
     public void setCart(Cart cart) {
         this.cart = cart;
-    }
-
-    public double getCartItemPrice() {
-        return cartItemPrice;
-    }
-
-    public void setCartItemPrice(double cartItemPrice) {
-        this.cartItemPrice = cartItemPrice;
     }
 }
